@@ -104,6 +104,33 @@
     self.reloadButton.frame = CGRectMake(3*buttonWidth, CGRectGetMaxY(self.webView.frame), buttonWidth, itemHeight);
 }
 
+- (void) resetWebView {
+    [self.webView removeFromSuperview];
+    
+    WKWebView *newWebView = [[WKWebView alloc] init];
+    newWebView.navigationDelegate = self;
+    [self.view addSubview:newWebView];
+    
+    self.webView = newWebView;
+    
+    [self addButtonTargets];
+    
+    self.textField.text = nil;
+    [self updateButtonsAndTitles];
+}
+
+- (void) addButtonTargets {
+    [self.backButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.forwardButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.stopButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.reloadButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.backButton addTarget:self.webView action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    [self.forwardButton addTarget:self.webView action:@selector(goForward) forControlEvents:UIControlEventTouchUpInside];
+    [self.stopButton addTarget:self.webView action:@selector(stopLoading) forControlEvents:UIControlEventTouchUpInside];
+    [self.reloadButton addTarget:self.webView action:@selector(reload) forControlEvents:UIControlEventTouchUpInside];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -173,7 +200,7 @@
     self.backButton.enabled = [self.webView canGoBack];
     self.forwardButton.enabled = [self.webView canGoForward];
     self.stopButton.enabled = self.webView.isLoading;
-    self.reloadButton.enabled = !self.webView.isLoading;
+    self.reloadButton.enabled = !self.webView.isLoading && self.webView.URL;
 }
 
 @end
