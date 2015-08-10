@@ -26,6 +26,17 @@
 
 #pragma mark - UIViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Welocme", @"Welcome") message:NSLocalizedString(@"Welcome to Browser App", @"App") preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okaction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleCancel
+                                                     handler:nil];
+    
+    [alert addAction:okaction];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void)loadView {
     UIView *mainView = [UIView new];
     
